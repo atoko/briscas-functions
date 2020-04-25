@@ -5,10 +5,15 @@
     "outDir": "dist",
     "rootDir": ".",
     "sourceMap": true,
-    "strict": false
+    "strict": true,
+    "baseUrl": ".",
+    "paths": {
+      "@@bootstrap/*": ["core/bootstrap/*"],
+      "@@briscas/*": ["core/briscas/*"]
+    }
   },
-  "baseUrl": "./",
-  "paths": {
-    "@briscas/*": "core/briscas"
-  }
+  "exclude": [
+    "node_modules",
+    "**/*.spec.ts"
+  ]  
 }

@@ -1,20 +1,27 @@
-import reducer from "../model/engine/reducer";
-import BriscasState from "../model/engine/state";
-import { NewGameAction } from "../model/engine/actions";
+import reducer from "@@briscas/engine/reducer";
+import NewGameAction from "@@briscas/engine/actions/NewGameAction";
+import BriscasState from "@@briscas/engine/state/BriscasState";
+import { BriscasData } from "@@briscas/model/data";
 
-class BriscasCommandService {
+export class BriscasCommandService {
+    briscasRepository = null;
+    
+    constructor(briscasRepository: any) {
+
+    }
+    
     createGame = (playerId: string, settings: {}) : Promise<any> => {
         let state = reducer(new BriscasState(), new NewGameAction(2))
-        let briscasData = {
-            id: Math.random() * 10000000,
+        let briscasData: BriscasData = {
+            id: (Math.random() * 10000000).toString(),
             state,
             settings,
             status: "WAITING",
-            created: Date.now()
+            created: Date.now().toString()
         }
 
         return Promise.resolve(briscasData)
     }
 }
 
-export default new BriscasCommandService();
+export default new BriscasCommandService(null);
