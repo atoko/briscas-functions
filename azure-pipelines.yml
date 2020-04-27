@@ -1,16 +1,9 @@
-# Node.js Function App to Linux on Azure
-# Build a Node.js function app and deploy it to Azure as a Linux function app.
-# Add steps that analyze code, save build artifacts, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
-
 trigger:
 - master
 
 variables:
-
   # Azure Resource Manager connection created during pipeline creation
   azureSubscription: 'f1b9c288-31f6-4097-877e-88fc470aa665'
- 
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
 
@@ -61,7 +54,7 @@ stages:
   jobs:
   - deployment: Deploy
     displayName: Deploy
-    environment: $(environmentName)
+    environment: latest
     pool: 
       vmImage: $(vmImageName)
     strategy:
