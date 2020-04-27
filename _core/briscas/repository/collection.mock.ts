@@ -1,6 +1,7 @@
 import BriscasRow from "$briscas/model/BriscasRow"
+import { BriscasCollectionRepository } from "./collection";
 
-export class BriscasCollectionRepository {
+export class BriscasCollectionRepositoryMock implements BriscasCollectionRepository {
     map: Record<string, BriscasRow> = {}
 
     create(data: BriscasRow): Promise<BriscasRow> {
@@ -13,4 +14,4 @@ export class BriscasCollectionRepository {
     }
 }
 
-export default new BriscasCollectionRepository()
+export default new BriscasCollectionRepositoryMock()

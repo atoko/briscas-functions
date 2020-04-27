@@ -1,5 +1,5 @@
 import BriscasData from "$briscas/model/BriscasData";
-export class BriscasRow implements BriscasData {
+export default class BriscasRow implements BriscasData {
     partitionKey!: string;
     rowId: string;
     id!: string;
@@ -7,6 +7,7 @@ export class BriscasRow implements BriscasData {
     settings: any;
     status!: "WAITING" | "PLAYING" | "RESULT";
     created!: string;
+
     constructor(briscasData: BriscasData) {
         this.rowId = briscasData.id;
         this.partitionKey = briscasData.state!.tableOwner!!;

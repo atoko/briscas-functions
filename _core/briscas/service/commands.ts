@@ -1,10 +1,10 @@
 import briscasReducer from "$briscas/engine/reducer";
-import NewGameAction from "$briscas/engine/actions/NewGameAction";
 import BriscasState from "$briscas/engine/state/BriscasState";
-import BriscasData from "$briscas/model/BriscasData";
-import briscasCollectionRepository, { BriscasCollectionRepository } from "$briscas/repository/collection";
+import NewGameAction from "$briscas/engine/actions/NewGameAction";
 import JoinGameAction from "$briscas/engine/actions/JoinGameAction";
-import { BriscasRow } from "$briscas/model/BriscasRow";
+import BriscasData from "$briscas/model/BriscasData";
+import BriscasRow from "$briscas/model/BriscasRow";
+import briscasCollectionRepository, { BriscasCollectionRepository } from "$briscas/repository/collection";
 
 export class BriscasCommandService {
     constructor(

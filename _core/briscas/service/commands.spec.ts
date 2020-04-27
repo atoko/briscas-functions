@@ -1,6 +1,7 @@
 import { BriscasCommandService } from "./commands"
+import briscasCollectionRepositoryMock from "$briscas/repository/collection.mock"
 
-const serviceInstance = new BriscasCommandService(null)
+const serviceInstance = new BriscasCommandService(briscasCollectionRepositoryMock)
 
 describe("createGame", () => {
 
