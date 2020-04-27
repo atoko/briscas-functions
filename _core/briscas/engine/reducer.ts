@@ -6,6 +6,7 @@ import PlayerState from "./state/PlayerState";
 import PlayCardAction from "./actions/PlayCardAction";
 import Card from "./state/Card";
 import CardResult from "./state/CardResult";
+import TableHistory from "./state/TableHistory";
 
 const newGame = (state: BriscasState, action: NewGameAction): BriscasState => {
     let [life] = action.deck.slice(-1);
@@ -77,7 +78,7 @@ const startGameTransition = (state: BriscasState): BriscasState => {
         for (let i = 0; i < 3; i++) {
             state.turnSequence.forEach((turn) => {
                 let card = deck.shift();
-                if (card) {
+                if (card !== undefined) {
                     players[turn].hand.push(card)
                 }
             })
@@ -105,6 +106,8 @@ const playCard = (state: BriscasState, action: PlayCardAction): BriscasState => 
 
     let nextPlayer = { ...state.players[nextPlayerId!!] };    
     if (nextPlayer?.hand.find(c => c === action.card)) {
+        nextPlayer.hand = nextPlayer.hand.filter(c => c !== action.card)
+        
         if (nextPlayer.isBot && action.profileOrPlayerId === nextPlayerId
             || nextPlayer.profileId === action.profileOrPlayerId
         ) {
@@ -115,7 +118,7 @@ const playCard = (state: BriscasState, action: PlayCardAction): BriscasState => 
             
             let table = [...state.table, new Card(action.card, nextPlayerId!!)];
             let turnSequence = [...state.turnSequence];
-            turnSequence.pop();
+            turnSequence.shift();
 
             return {
                 ...state,
@@ -141,15 +144,38 @@ const turnTransition = (state: BriscasState): BriscasState => {
             let card = table.shift();
             points += Card.getPoints(card!!)
 
-            if (winCard !== undefined) {
+            if (winCard === undefined) {
                 winCard = card
             } else {
                 winResult = Card.determineWinner(state.life!!, winCard!!, card!!)
                 winCard = winResult!!.card
             }
         } while(table.length > 0)
-    
-        return { ...state, table: [] };
+
+        let lastTable = new TableHistory(state.table, winResult!!)
+        let winner = { ...state.players[winCard?.playerId!!] }
+        winner.points += points;
+
+        let players = {...state.players}
+        let turnSequence: string[] = []
+        let player = winner;
+        let deck = [...state.deck!!];
+        state.turnSequence.forEach(() => {
+            turnSequence.push(player.id!!);
+            if (deck.length > 0) {
+                player.hand.push(deck.shift()!!)
+            }
+            player = players[player.nextPlayer!!]
+        })
+
+        return { 
+            ...state, 
+            table: [], 
+            players, 
+            deck, 
+            turnSequence,
+            lastTable
+        };
     } else {
         return { ...state }
     }

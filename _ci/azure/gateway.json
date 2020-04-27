@@ -1,0 +1,140 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "applicationGateways_peloris_appgateway_name": {
+            "defaultValue": "peloris-appgateway",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Network/applicationGateways",
+            "apiVersion": "2019-12-01",
+            "name": "[parameters('applicationGateways_peloris_appgateway_name')]",
+            "location": "centralus",
+            "properties": {
+                "backendAddressPools": [
+                    {
+                        "name": "peloris-appgateway-latest-backend-web",
+                        "properties": {
+                            "backendAddresses": [
+                                {
+                                    "fqdn": "pelorislatestweb.z19.web.core.windows.net"
+                                }
+                            ]
+                        }
+                    }
+                ],
+                "backendHttpSettingsCollection": [
+                    {
+                        "name": "peloris-appgateway-latest-be-htst",
+                        "properties": {
+                            "port": 443,
+                            "protocol": "Https",
+                            "cookieBasedAffinity": "Disabled",
+                            "hostName": "pelorislatestweb.z19.web.core.windows.net",
+                            "pickHostNameFromBackendAddress": false,
+                            "requestTimeout": 3,
+                            "probe": {
+                                "id": "[concat(resourceId('Microsoft.Network/applicationGateways', parameters('applicationGateways_peloris_appgateway_name')), '/probes/peloris-appgateway-latest-healthprobe')]"
+                            }
+                        }
+                    }
+                ],
+                "httpListeners": [
+                   {
+                        "name": "peloris-appgateway-latest-listener",
+                        "properties": {
+                            "frontendIPConfiguration": {
+                                "id": "[concat(resourceId('Microsoft.Network/applicationGateways', parameters('applicationGateways_peloris_appgateway_name')), '/frontendIPConfigurations/peloris-network-feip')]"
+                            },
+                            "frontendPort": {
+                                "id": "[concat(resourceId('Microsoft.Network/applicationGateways', parameters('applicationGateways_peloris_appgateway_name')), '/frontendPorts/peloris-network-feport')]"
+                            },
+                            "protocol": "Https",
+                            "hostName": "latest.briscas.net",
+                            "hostNames": [],
+                            "requireServerNameIndication": false
+                        }
+                    }
+                ],
+                "urlPathMaps": [
+                    {
+                        "name": "peloris-appgateway-latest-routes",
+                        "properties": {
+                            "defaultBackendAddressPool": {
+                                "id": "[concat(resourceId('Microsoft.Network/applicationGateways', parameters('applicationGateways_peloris_appgateway_name')), '/backendAddressPools/peloris-invincible-network-beap')]"
+                            },
+                            "defaultBackendHttpSettings": {
+                                "id": "[concat(resourceId('Microsoft.Network/applicationGateways', parameters('applicationGateways_peloris_appgateway_name')), '/backendHttpSettingsCollection/peloris-network-be-htst')]"
+                            },
+                            "pathRules": [
+                                {
+                                    "name": "function-api",
+                                    "properties": {
+                                        "paths": [
+                                            "/io/*"
+                                        ],
+                                        "backendAddressPool": {
+                                            "id": "[concat(resourceId('Microsoft.Network/applicationGateways', parameters('applicationGateways_peloris_appgateway_name')), '/backendAddressPools/peloris-network-beap')]"
+                                        },
+                                        "backendHttpSettings": {
+                                            "id": "[concat(resourceId('Microsoft.Network/applicationGateways', parameters('applicationGateways_peloris_appgateway_name')), '/backendHttpSettingsCollection/peloris-network-be-htst')]"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ],
+                "requestRoutingRules": [
+                    {
+                        "name": "peloris-network-rqrt",
+                        "properties": {
+                            "ruleType": "Basic",
+                            "httpListener": {
+                                "id": "[concat(resourceId('Microsoft.Network/applicationGateways', parameters('applicationGateways_peloris_appgateway_name')), '/httpListeners/peloris-network-httplstn')]"
+                            },
+                            "backendAddressPool": {
+                                "id": "[concat(resourceId('Microsoft.Network/applicationGateways', parameters('applicationGateways_peloris_appgateway_name')), '/backendAddressPools/peloris-network-beap')]"
+                            },
+                            "backendHttpSettings": {
+                                "id": "[concat(resourceId('Microsoft.Network/applicationGateways', parameters('applicationGateways_peloris_appgateway_name')), '/backendHttpSettingsCollection/peloris-network-be-htst')]"
+                            }
+                        }
+                    },
+                    {
+                        "name": "invincible-network-routes",
+                        "properties": {
+                            "ruleType": "PathBasedRouting",
+                            "httpListener": {
+                                "id": "[concat(resourceId('Microsoft.Network/applicationGateways', parameters('applicationGateways_peloris_appgateway_name')), '/httpListeners/invincible')]"
+                            },
+                            "urlPathMap": {
+                                "id": "[concat(resourceId('Microsoft.Network/applicationGateways', parameters('applicationGateways_peloris_appgateway_name')), '/urlPathMaps/invincible-network-routes')]"
+                            }
+                        }
+                    }
+                ],
+                "probes": [
+                    {
+                        "name": "invincible-healthprobe",
+                        "properties": {
+                            "protocol": "Https",
+                            "host": "pelorislatestweb.z19.web.core.windows.net",
+                            "path": "/",
+                            "interval": 30,
+                            "timeout": 30,
+                            "unhealthyThreshold": 3,
+                            "pickHostNameFromBackendHttpSettings": false,
+                            "minServers": 0,
+                            "match": {}
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}

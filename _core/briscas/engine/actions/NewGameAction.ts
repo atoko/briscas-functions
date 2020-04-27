@@ -4,6 +4,7 @@ export default class NewGameAction implements IAction {
     type: String = NewGameAction.TYPE;
     deck: number[];
     tableSize: number;
+    
     static shuffle = function (array: number[]) {
         for (var c = array.length - 1; c > 1; c--) {
             var r = Number.parseInt((Math.random() * c).toFixed(0));
@@ -16,6 +17,7 @@ export default class NewGameAction implements IAction {
         }
         return array;
     };
+
     static randomDeck = (numberOfCards: Number) => {
         return NewGameAction.shuffle([...Array(numberOfCards).keys()]);
     };

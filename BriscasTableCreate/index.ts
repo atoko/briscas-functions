@@ -1,10 +1,10 @@
 import 'module-alias/register'
 import { AzureFunction, Context, HttpRequest } from "@azure/functions"
-import BriscasCommandService from "@@briscas/service/commands";
-import { BriscasOneResponse } from "@@briscas/model/response";
+import briscasCommandService from "$briscas/service/commands";
+import { BriscasOneResponse } from "$briscas/model/response";
 
 const httpTrigger: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
-    let briscasData = await BriscasCommandService.createGame("fulano", {});
+    let briscasData = await briscasCommandService.createGame("fulano", {});
 
     //TODO: Parse JWT and fetch player id
     context.res = {

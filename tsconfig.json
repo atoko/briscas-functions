@@ -8,8 +8,7 @@
     "strict": true,
     "baseUrl": ".",
     "paths": {
-      "@@bootstrap/*": ["core/bootstrap/*"],
-      "@@briscas/*": ["core/briscas/*"]
+      "$briscas/*": ["_core/briscas/*"]
     }
   },
   "exclude": [

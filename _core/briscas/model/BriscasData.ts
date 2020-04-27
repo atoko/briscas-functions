@@ -1,4 +1,4 @@
-import { BriscasState } from "@@briscas/engine/state/BriscasState"
+import BriscasState from "$briscas/engine/state/BriscasState"
 
 export type BriscasData = {
     id: string 
@@ -7,3 +7,5 @@ export type BriscasData = {
     status: "WAITING" | "PLAYING" | "RESULT"
     created: string
 }
+
+export default BriscasData

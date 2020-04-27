@@ -9,7 +9,7 @@ export default class PlayerState {
     pile: number[] = [];
 
     constructor(team: number, profileId?: string) {
-        const jitter = Math.round((Math.random() * 300) - 150)
+        const jitter = Math.round((Math.random() * 30000) - 15000)
         this.id = (Date.now() + jitter).toString().slice(-6);
         this.team = team;
         if (profileId) {

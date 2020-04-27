@@ -4,6 +4,8 @@ import NewGameAction from "./actions/NewGameAction"
 import JoinGameAction from "./actions/JoinGameAction"
 import PlayCardAction from "./actions/PlayCardAction"
 
+const randomDeck = () => [...Array(40).keys()];
+
 describe("New Game", () => {
     it("Initializes deck and life", async (done) => {
         let deck = [...Array(40).keys()];
@@ -64,6 +66,7 @@ describe("Join game", () => {
         }, new BriscasState())
 
         expect(Object.keys(state.players).length).toBe(2)
+        expect(state.turnSequence.length).toBe(2)
         done()
     })    
 })
@@ -81,11 +84,32 @@ describe("Start game transition", () => {
         }, new BriscasState())
 
         expect(state.deck?.length).toBe(40 - 6)
+        Object.keys(state.players)
+            .map(pid => state.players[pid])
+            .forEach((player) => {
+                expect(player.hand.length).toBe(3)
+        })
         done()
     })
 });
 
 describe("Play card", () => {
+    it("should add card to table", () => {      
+        let playerOneId = "playCardsPlayer1";
+        let playerTwoId = "playCardsPlayer2";        
+        let state = [
+            new NewGameAction(2, randomDeck()),
+            new JoinGameAction(playerOneId),
+            new JoinGameAction(playerTwoId),     
+            new PlayCardAction(playerOneId, 4)
+        ].reduce((previousState, currentAction) => {
+            return briscasReducer(previousState, currentAction)
+        }, new BriscasState())
+
+        expect(state.table.length).toBe(1)
+        expect(state.table[0].index).toBe(4)
+    })
+
     it("should not allow play when table isn't full", () => {
         let playerOneId = "playCardsPlayer1";
         let state = [
@@ -100,12 +124,11 @@ describe("Play card", () => {
     })
 
     it("should not allow a card that isn't in the players hand", () => {
-        let deck = [...Array(40).keys()];
         let playerOneId = "playCardsPlayer1";
         let playerTwoId = "playCardsPlayer2";
 
         let state = [
-            new NewGameAction(2),
+            new NewGameAction(2, randomDeck()),
             new JoinGameAction(playerOneId),
             new JoinGameAction(playerTwoId),            
             new PlayCardAction(playerOneId, 32)
@@ -117,12 +140,11 @@ describe("Play card", () => {
     })    
 
     it("should not allow anyone but the current player", () => {
-        let deck = [...Array(40).keys()];
         let playerOneId = "playCardsPlayer1";
         let playerTwoId = "playCardsPlayer2";
 
         let state = [
-            new NewGameAction(2),
+            new NewGameAction(2, randomDeck()),
             new JoinGameAction(playerOneId),
             new JoinGameAction(playerTwoId),            
             new PlayCardAction(playerTwoId, 3)
@@ -131,5 +153,35 @@ describe("Play card", () => {
         }, new BriscasState())
 
         expect(state.table.length).toBe(0)
-    })        
+    })
+    
+})
+
+describe("turn transition", () => {
+    it("clears table and sets lastTable", () => {
+        let playerOneId = "playCardsPlayer1";
+        let playerTwoId = "playCardsPlayer2";        
+        let state = [
+            new NewGameAction(2, randomDeck()),
+            new JoinGameAction(playerOneId),
+            new JoinGameAction(playerTwoId),     
+            new PlayCardAction(playerOneId, 2),
+            new PlayCardAction(playerTwoId, 1)            
+        ].reduce((previousState, currentAction) => {
+            return briscasReducer(previousState, currentAction)
+        }, new BriscasState())
+
+        expect(state.table.length).toBe(0)
+        expect(state.lastTable).toBeTruthy()
+        expect(state.lastTable?.cards.some(c => c.index == 2)).toBeTruthy()
+        expect(state.lastTable?.cards.some(c => c.index == 1)).toBeTruthy()        
+    })
+})
+
+describe("game", () => {
+    test.todo("player hands are empty after all cards played")
+})
+
+describe("forfeit game", () => {
+    test.todo("assigns remaining points")
 })
