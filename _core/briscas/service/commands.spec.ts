@@ -1,13 +1,17 @@
 import { BriscasCommandService } from "./commands"
-import briscasCollectionRepositoryMock from "$briscas/repository/collection.mock"
+import BriscasCollectionRepositoryMock from "$briscas/repository/collection.mock"
 
-const serviceInstance = new BriscasCommandService(briscasCollectionRepositoryMock)
+let commandService: BriscasCommandService;
 
+beforeEach(() => {
+    let mockRepository = new BriscasCollectionRepositoryMock();
+    commandService = new BriscasCommandService(mockRepository);
+})
 describe("createGame", () => {
 
     it("returns a briscasData with id and status waiting", async (done) => {
         let playerId = "playerId";
-        let data = await serviceInstance.createGame(playerId, {})
+        let data = await commandService.createGame(playerId, {})
         expect(data.id).toBeTruthy()
         expect(data.status).toEqual("WAITING")
         done()

@@ -6,10 +6,9 @@
       "direction": "in",
       "name": "req",
       "methods": [
-        "get",
-        "post"
+        "get"
       ],
-      "route": ""
+      "route": "v5/briscas"
     },
     {
       "type": "http",
@@ -17,5 +16,5 @@
       "name": "res"
     }
   ],
-  "scriptFile": "../dist/ReadTable/index.js"
+  "scriptFile": "../dist/BriscasTableRead/index.js"
 }

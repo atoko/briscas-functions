@@ -4,14 +4,15 @@ import { BriscasCollectionRepository } from "./collection";
 export class BriscasCollectionRepositoryMock implements BriscasCollectionRepository {
     map: Record<string, BriscasRow> = {}
 
-    create(data: BriscasRow): Promise<BriscasRow> {
-        this.map[data.id] = data;
-        return Promise.resolve(data);
+    async create(row: BriscasRow): Promise<BriscasRow> {
+        this.map[row.rowId] = row;
+        return Promise.resolve(row);
     }
 
-    readById(profileId: string, briscasId: string): Promise<BriscasRow> {
+    async readById(profileId: string, briscasId: string): Promise<BriscasRow> {
+        console.log(this.map)
         return Promise.resolve(this.map[briscasId]!!)
     }
 }
 
-export default new BriscasCollectionRepositoryMock()
+export default BriscasCollectionRepositoryMock

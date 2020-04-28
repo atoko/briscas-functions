@@ -16,4 +16,14 @@ export default class BriscasRow implements BriscasData {
         this.status = briscasData.status
         this.created = briscasData.created
     }
+
+    static toData(row: BriscasRow) {
+        return {
+            id: row.rowId,
+            state: row.state,
+            settings: row.settings,
+            status: row.status,
+            created: row.created
+        }
+    }
 }

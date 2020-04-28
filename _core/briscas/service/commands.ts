@@ -11,7 +11,7 @@ export class BriscasCommandService {
         readonly briscasCollectionRepository: BriscasCollectionRepository
     ) {}
     
-    createGame = (playerId: string, settings: {}) : Promise<BriscasData> => {
+    async createGame(playerId: string, settings: {}) : Promise<BriscasData> {
         let state = [
             new NewGameAction(2),
             new JoinGameAction(playerId)            
@@ -26,8 +26,8 @@ export class BriscasCommandService {
             created: Date.now().toString()
         }
 
-        return this.briscasCollectionRepository.create(new BriscasRow(data))
-            .then(row => data)
+        let row = await this.briscasCollectionRepository.create(new BriscasRow(data))
+        return BriscasRow.toData(row);
     }
 }
 
