@@ -8,12 +8,15 @@
     "strict": true,
     "baseUrl": ".",
     "paths": {
+      "$server/*": ["_core/server/*"],
+      "$accounts/*": ["_core/accounts/*"],
       "$briscas/*": ["_core/briscas/*"]
-    }
+    },
+    "experimentalDecorators": true
   },
   "exclude": [
     "node_modules",
     "**/*.spec.ts",
     "**/*.mock.ts"    
-  ]  
+  ]
 }

@@ -19,12 +19,14 @@ export class BriscasCommandService {
             return briscasReducer(previousState, currentAction)
         }, new BriscasState())
         let data: BriscasData = {
-            id: (Math.random() * 10000000).toString(),
+            id: (Number.MAX_SAFE_INTEGER - (new Date().valueOf())).toString(),
             state,
             settings,
             status: "WAITING",
             created: Date.now().toString()
         }
+
+        //TODO: add bot
 
         let row = await this.briscasCollectionRepository.create(new BriscasRow(data))
         return BriscasRow.toData(row);

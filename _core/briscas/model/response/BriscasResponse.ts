@@ -1,4 +1,4 @@
-import { BriscasData } from "./BriscasData"
+import { BriscasData } from "../BriscasData"
 
 export class BriscasResponse {
     constructor(briscasData: BriscasData, playerId: String) {

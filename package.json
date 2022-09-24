@@ -10,16 +10,26 @@
     "test": "jest"
   },
   "dependencies": {
-    "module-alias": "^2.2.2"
+    "@types/uuid": "^7.0.3",
+    "class-transformer": "^0.2.3",
+    "class-transformer-validator": "^0.8.0",
+    "class-validator": "^0.12.2",
+    "jsonwebtoken": "^8.5.1",
+    "module-alias": "^2.2.2",
+    "reflect-metadata": "^0.1.13",
+    "uuid": "^8.0.0"
   },
   "devDependencies": {
     "@azure/functions": "^1.0.2-beta2",
     "@types/jest": "^25.2.1",
+    "@types/jsonwebtoken": "^8.3.9",
     "jest": "^25.4.0",
     "ts-jest": "^25.4.0",
     "typescript": "^3.3.3"
   },
   "_moduleAliases": {
+    "$server": "dist/_core/server",
+    "$accounts": "dist/_core/accounts",
     "$briscas": "dist/_core/briscas"
   }
 }

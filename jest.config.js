@@ -5,5 +5,12 @@ module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, { prefix: "<rootDir>/" }),
-  testPathIgnorePatterns: ["/node_modules/", "/^dist/"] 
+  testPathIgnorePatterns: ["/node_modules/", "/^dist/"],
+  globals: {
+    'ts-jest': {
+      diagnostics: {
+        warnOnly: true
+      }
+    }
+  }
 };

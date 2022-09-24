@@ -1,4 +1,5 @@
-import BriscasRow from "$briscas/model/BriscasRow"
+import BriscasRow from "$briscas/model/BriscasRow";
+
 import { BriscasCollectionRepository } from "./collection";
 
 export class BriscasCollectionRepositoryMock implements BriscasCollectionRepository {
@@ -10,7 +11,6 @@ export class BriscasCollectionRepositoryMock implements BriscasCollectionReposit
     }
 
     async readById(profileId: string, briscasId: string): Promise<BriscasRow> {
-        console.log(this.map)
         return Promise.resolve(this.map[briscasId]!!)
     }
 }
